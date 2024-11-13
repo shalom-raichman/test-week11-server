@@ -26,7 +26,7 @@ export const loginService = async (user: UserLoginDTO) => {
   try {
     if (!user.password || !user.name)
       throw new Error('Missing user data')
-    const dbUser = await userModel.findOne({ username: user.name }).lean()
+    const dbUser = await userModel.findOne({ name: user.name }).lean()
     if (!dbUser) throw new Error('User not found')
     const metch = await compare(user.password, dbUser.password)
     if (!metch) throw new Error('Wrong password')
