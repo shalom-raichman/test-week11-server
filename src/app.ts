@@ -5,6 +5,7 @@ import cors from 'cors'
 import http from 'http'
 import { Server } from 'socket.io'
 import { handelIoConnection } from './socket/io'
+import userControllers from './controllers/user.controller'
 
 const PORT = process.env.PORT || 3000
 
@@ -23,7 +24,7 @@ connectToMongo()
 app.use(express.json())
 app.use(cors())
 
-app.use()
+app.use('/users', userControllers)
 
 httpServer.listen(PORT, () => {
   console.log(`Server is up and runing on http://localhost:${PORT}`)
