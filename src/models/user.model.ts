@@ -1,7 +1,7 @@
 import organizationSchema, { IOrganization } from './organization.model'
-import { Document, Schema } from 'mongoose'
+import { Document, model, Schema } from 'mongoose'
 
-export default interface IUser extends Document {
+export interface IUser extends Document {
   name: string
   password: string
   orgnization: IOrganization
@@ -26,5 +26,6 @@ const userSchema = new Schema<IUser>({
     type: organizationSchema,
     required: [true, 'user must heve organization']
   }
-
 })
+
+export default model<IUser>('User', userSchema)
