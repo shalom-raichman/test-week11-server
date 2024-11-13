@@ -23,6 +23,8 @@ connectToMongo()
 app.use(express.json())
 app.use(cors())
 
+app.use()
+
 httpServer.listen(PORT, () => {
   console.log(`Server is up and runing on http://localhost:${PORT}`)
 })
