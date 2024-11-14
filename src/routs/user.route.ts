@@ -32,5 +32,6 @@ export const login = async (req: Request<any, any, UserLoginDTO>, res: Response)
       err: true,
       data: null
     })
+    console.error(err)
   }
 }
