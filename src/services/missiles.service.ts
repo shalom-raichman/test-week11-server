@@ -4,31 +4,37 @@ import inteceptionSchema, {
 import missileLaunchModel, {
   IMissileLaunch,
 } from '../models/missileLaunch.model'
+import missiles from '../data/missiles.json'
+import { MissileLaunchStatusEnum } from '../enums/MissileLaunchStatusEnum'
 
-export const misileLaunch = async (missileLaunch: IMissileLaunch) => {
+export const getAllMisslieLaunch = async () => {
   try {
+    const missileLaunch = await missileLaunchModel.find()
+    return missileLaunch
+  } catch (err) {
+    throw err
+  }
+}
+
+export const launchMissileService = async (missileLaunch: IMissileLaunch) => {
+  try {
+    missileLaunch.timeToHit = missiles.find(
+      (m) => m.name === missileLaunch.rocketType
+    )?.speed as number
     const newMissileLaunch = new missileLaunchModel(missileLaunch)
     return await newMissileLaunch.save()
   } catch (err) {
-    console.error(err)
-    // return { err: true, msg: (err as Error).message }
+    throw err
   }
 }
 
-export const missileInterception = async (
-  interceptor: IMissileInterception
+export const updateMissileStatusService = async (
+  id: string,
+  status: MissileLaunchStatusEnum
 ) => {
   try {
-    const newInterception = new inteceptionSchema(interceptor)
-    return newInterception.save()
+    return await missileLaunchModel.findByIdAndUpdate(id, { status })
   } catch (err) {
-    console.error(err)
+    throw err
   }
-}
-
-export const updateIntercetionStatus = async (
-  interceptor: IMissileInterception
-) => {
-  try {
-  } catch (err) {}
 }
