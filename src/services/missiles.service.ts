@@ -29,11 +29,11 @@ export const launchMissileService = async (missileLaunch: IMissileLaunch) => {
 }
 
 export const updateMissileStatusService = async (
-  id: string,
+  _id: string,
   status: MissileLaunchStatusEnum
 ) => {
   try {
-    return await missileLaunchModel.findByIdAndUpdate(id, { status })
+    return await missileLaunchModel.findByIdAndUpdate(_id, { status: status })
   } catch (err) {
     throw err
   }
