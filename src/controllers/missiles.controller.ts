@@ -5,11 +5,11 @@ import verifyUser from '../middlewares/verifyUser'
 
 const router = Router()
 
-router.get('/missileLaunch', verifyUser, getMissileLaunch)
+router.get('/', verifyUser, getMissileLaunch)
 
-router.post('/missileLaunch', verifyUser, launchMissile)
+router.post('/', verifyUser, launchMissile)
 
-router.patch('/missileLaunch', verifyUser, updateMissileStatus)
+router.patch('/', verifyUser, updateMissileStatus)
 
 
 export default router
