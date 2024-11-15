@@ -47,12 +47,12 @@ export const launchMissile = async (
 }
 
 export const updateMissileStatus = async (
-  req: Request<any, any, { id: string; status: MissileLaunchStatusEnum }>,
+  req: Request<any, any, { _id: string; status: MissileLaunchStatusEnum }>,
   res: Response
 ) => {
   try {
-    const {id, status} = req.body
-    const updatedLaunch = await updateMissileStatusService(id, status)
+    const {_id, status} = req.body
+    const updatedLaunch = await updateMissileStatusService(_id, status)
     res.status(201).json({
       msg: 'Launch updated successfuly',
       err: false,
