@@ -7,6 +7,7 @@ import missileLaunchModel, {
 import missiles from '../data/missiles.json'
 import { MissileLaunchStatusEnum } from '../enums/MissileLaunchStatusEnum'
 import { OrgnizationsEnum } from '../enums/orgnizationEnum'
+import userModel from '../models/user.model'
 
 export const getAllMisslieLaunch = async () => {
   try {
@@ -26,11 +27,23 @@ export const getAllMisslieLaunchByArea = async (area: OrgnizationsEnum) => {
   }
 }
 
-export const launchMissileService = async (missileLaunch: IMissileLaunch) => {
+export const launchMissileService = async (
+  missileLaunch: IMissileLaunch,
+  _id: string
+) => {
   try {
     missileLaunch.timeToHit = missiles.find(
       (m) => m.name === missileLaunch.rocketType
     )?.speed as number
+    const dbUser = await userModel.findById(_id)
+    if (!dbUser) throw new Error('User not found')
+    const resources = dbUser?.orgnization.resources.find(
+      (r) => r.name == missileLaunch.rocketType
+    )!
+    if (resources?.amount <= 0)
+      throw new Error('you do not have this resource avilable')
+    resources.amount -= 1
+    dbUser.save()
     const newMissileLaunch = new missileLaunchModel(missileLaunch)
     return await newMissileLaunch.save()
   } catch (err) {
