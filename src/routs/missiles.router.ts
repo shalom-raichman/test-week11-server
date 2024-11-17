@@ -50,7 +50,7 @@ export const launchMissile = async (
   res: Response
 ) => {
   try {
-    const missileLaunch = await launchMissileService(req.body)
+    const missileLaunch = await launchMissileService(req.body, (req as any).user.user_id)
     res.status(201).json({
       msg: 'Missile launch successsfuly',
       err: false,
