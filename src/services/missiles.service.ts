@@ -60,12 +60,17 @@ export const handelCountToHit = async (_id: string) => {
     const dbLaunch = await missileLaunchModel.findById(_id)
     if (!dbLaunch) throw new Error('launch not found')
     const myInterval = setInterval(() => {
-      dbLaunch.status == MissileLaunchStatusEnum.Launched &&
-      dbLaunch.timeToHit > 0
-        ? (dbLaunch.timeToHit -= 1)
-        : (dbLaunch.status = MissileLaunchStatusEnum.Hit)
-      dbLaunch.save()
-      clearInterval(myInterval)
+      if (
+        dbLaunch.status == MissileLaunchStatusEnum.Launched &&
+        dbLaunch.timeToHit > 0
+      ) {
+        dbLaunch.timeToHit -= 1
+        dbLaunch.save()
+      } else {
+        dbLaunch.status = MissileLaunchStatusEnum.Hit
+        dbLaunch.save()
+        clearInterval(myInterval)
+      }
     }, 1000)
   } catch (err) {
     throw err
@@ -93,8 +98,9 @@ export const interceptionService = async (
     if (!dbLaunch) throw new Error('launch not found')
     const interceptor = missiles.find((m) => m.name == interceptorType)
     if (!interceptor) throw new Error('interceptor type is not valid')
-    if(dbLaunch.status == MissileLaunchStatusEnum.Intercepted) throw new Error('missile alredy intercepted');
-    
+    if (dbLaunch.status == MissileLaunchStatusEnum.Intercepted)
+      throw new Error('missile alredy intercepted')
+
     if (
       interceptor.intercepts.includes(dbLaunch.rocketType) &&
       interceptor.speed <= dbLaunch.timeToHit
