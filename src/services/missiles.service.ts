@@ -45,7 +45,29 @@ export const launchMissileService = async (
     resources.amount -= 1
     dbUser.save()
     const newMissileLaunch = new missileLaunchModel(missileLaunch)
+    handelCountToHit(newMissileLaunch._id as string)
     return await newMissileLaunch.save()
+  } catch (err) {
+    throw err
+  }
+}
+
+export const handelCountToHit = async (_id: string) => {
+  try {
+    const dbLaunch = await missileLaunchModel.findById(_id)
+    if (!dbLaunch) throw new Error('launch not found')
+    if (
+      dbLaunch.status == MissileLaunchStatusEnum.Hit ||
+      dbLaunch.status == MissileLaunchStatusEnum.Intercepted
+    )
+      return
+    setInterval(() => {
+      dbLaunch.timeToHit > 0
+        ? (dbLaunch.timeToHit -= 1)
+        : (dbLaunch.status = MissileLaunchStatusEnum.Hit)
+      dbLaunch.save()
+    }, 1000)
+
   } catch (err) {
     throw err
   }
