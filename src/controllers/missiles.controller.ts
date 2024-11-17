@@ -7,6 +7,8 @@ const router = Router()
 
 router.get('/', verifyUser, getMissileLaunch)
 
+router.get('/:area', verifyUser, getMissileLaunch)
+
 router.post('/', verifyUser, launchMissile)
 
 router.patch('/', verifyUser, updateMissileStatus)

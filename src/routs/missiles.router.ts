@@ -3,15 +3,34 @@ import { UserLoginDTO, UserRegisterDTO } from '../DTO/user.DTO'
 import { loginService, registerService } from '../services/user.service'
 import {
   getAllMisslieLaunch,
+  getAllMisslieLaunchByArea,
   launchMissileService,
   updateMissileStatusService,
 } from '../services/missiles.service'
 import { MissileLaunchStatusEnum } from '../enums/MissileLaunchStatusEnum'
 import { IMissileLaunch } from '../models/missileLaunch.model'
+import { OrgnizationsEnum } from '../enums/orgnizationEnum'
 
 export const getMissileLaunch = async (req: Request, res: Response) => {
   try {
     const missileLaunch = await getAllMisslieLaunch()
+    res.status(201).json({
+      msg: 'List of the missiles that launched',
+      err: false,
+      data: missileLaunch,
+    })
+  } catch (err) {
+    res.status(400).json({
+      msg: (err as Error).message,
+      err: true,
+      data: null,
+    })
+  }
+}
+
+export const getMissileLaunchByArea = async (req: Request, res: Response) => {
+  try {
+    const missileLaunch = await getAllMisslieLaunchByArea(req.params.area as OrgnizationsEnum)
     res.status(201).json({
       msg: 'List of the missiles that launch to your area',
       err: false,
