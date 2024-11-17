@@ -43,3 +43,15 @@ export const loginService = async (user: UserLoginDTO) => {
     throw err
   }
 }
+
+
+export const getUserProfile = async (id: string) => {
+  try {
+    if(!id) throw new Error('id is requierd');
+    const user = await userModel.findById(id)
+    if(!user) throw new Error('user not found');
+    return user
+  } catch (err) {
+    throw err
+  }
+}

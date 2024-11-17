@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import { UserLoginDTO, UserRegisterDTO } from '../DTO/user.DTO'
-import { loginService, registerService } from '../services/user.service'
+import { getUserProfile, loginService, registerService } from '../services/user.service'
 
 export const register = async (req: Request<any, any, UserRegisterDTO>, res: Response) => {
   try {
@@ -33,5 +33,17 @@ export const login = async (req: Request<any, any, UserLoginDTO>, res: Response)
       data: null
     })
     console.error(err)
+  }
+}
+
+export const profile = async (
+  req: Request<any, any, { id: string }>,
+  res: Response
+) => {
+  try {
+    const user = await getUserProfile(req.body.id)
+    res.status(200).json(user)
+  } catch (err) {
+    res.status(400).json((err as Error).message)
   }
 }
