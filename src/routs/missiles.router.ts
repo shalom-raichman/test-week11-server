@@ -32,6 +32,7 @@ export const getMissileLaunch = async (req: Request, res: Response) => {
 
 export const getMissileLaunchByArea = async (req: Request, res: Response) => {
   try {
+    console.log('area: '+ req.params.area)
     const missileLaunch = await getAllMisslieLaunchByArea(req.params.area as OrgnizationsEnum)
     res.status(201).json({
       msg: 'List of the missiles that launch to your area',
@@ -89,12 +90,12 @@ export const updateMissileStatus = async (
 }
 
 export const interception = async (
-  req: Request<any, any, { _id: string; interseptionType: InterceptorsEnum }>,
+  req: Request<any, any, { _id: string; interceptorType: InterceptorsEnum }>,
   res: Response
 ) => {
   try {
-    const {_id, interseptionType} = req.body
-    const updatedLaunch = await interceptionService(_id, interseptionType)
+    const {_id, interceptorType} = req.body
+    const updatedLaunch = await interceptionService(_id, interceptorType)
     res.status(201).json({
       msg: 'Launch intercepted successfuly',
       err: false,
