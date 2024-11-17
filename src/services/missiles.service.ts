@@ -8,6 +8,7 @@ import missiles from '../data/missiles.json'
 import { MissileLaunchStatusEnum } from '../enums/MissileLaunchStatusEnum'
 import { OrgnizationsEnum } from '../enums/orgnizationEnum'
 import userModel from '../models/user.model'
+import { InterceptorsEnum } from '../enums/interceptorsEnum'
 
 export const getAllMisslieLaunch = async () => {
   try {
@@ -67,7 +68,6 @@ export const handelCountToHit = async (_id: string) => {
         : (dbLaunch.status = MissileLaunchStatusEnum.Hit)
       dbLaunch.save()
     }, 1000)
-
   } catch (err) {
     throw err
   }
@@ -79,6 +79,31 @@ export const updateMissileStatusService = async (
 ) => {
   try {
     return await missileLaunchModel.findByIdAndUpdate(_id, { status: status })
+  } catch (err) {
+    throw err
+  }
+}
+
+export const interceptionService = async (
+  _id: string,
+  interceptorType: InterceptorsEnum
+) => {
+  try {
+    const dbLaunch = await missileLaunchModel.findById(_id)
+    if (!dbLaunch) throw new Error('launch not found')
+    const interceptor = missiles.find((m) => m.name == interceptorType)
+    if (!interceptor) throw new Error('interceptor type is not valid')
+    if (
+      interceptor.intercepts.includes(dbLaunch.rocketType) &&
+      interceptor.speed <= dbLaunch.timeToHit
+    ) {
+      dbLaunch.status = MissileLaunchStatusEnum.Intercepted
+      dbLaunch.timeToHit = 0
+      dbLaunch.save()
+    } else {
+      throw new Error("missile allredy hit the target ):");
+      
+    }
   } catch (err) {
     throw err
   }

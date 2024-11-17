@@ -4,12 +4,14 @@ import { loginService, registerService } from '../services/user.service'
 import {
   getAllMisslieLaunch,
   getAllMisslieLaunchByArea,
+  interceptionService,
   launchMissileService,
   updateMissileStatusService,
 } from '../services/missiles.service'
 import { MissileLaunchStatusEnum } from '../enums/MissileLaunchStatusEnum'
 import { IMissileLaunch } from '../models/missileLaunch.model'
 import { OrgnizationsEnum } from '../enums/orgnizationEnum'
+import { InterceptorsEnum } from '../enums/interceptorsEnum'
 
 export const getMissileLaunch = async (req: Request, res: Response) => {
   try {
@@ -74,6 +76,27 @@ export const updateMissileStatus = async (
     const updatedLaunch = await updateMissileStatusService(_id, status)
     res.status(201).json({
       msg: 'Launch updated successfuly',
+      err: false,
+      data: updatedLaunch,
+    })
+  } catch (err) {
+    res.status(400).json({
+      msg: (err as Error).message,
+      err: true,
+      data: null,
+    })
+  }
+}
+
+export const interception = async (
+  req: Request<any, any, { _id: string; interseptionType: InterceptorsEnum }>,
+  res: Response
+) => {
+  try {
+    const {_id, interseptionType} = req.body
+    const updatedLaunch = await interceptionService(_id, interseptionType)
+    res.status(201).json({
+      msg: 'Launch intercepted successfuly',
       err: false,
       data: updatedLaunch,
     })
