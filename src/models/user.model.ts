@@ -7,9 +7,6 @@ export interface IUser extends Document {
   orgnization: IOrganization
 }
 
-// this.orgnization = organizations.find(
-//   (o) => o.name === orgnizationName
-// ) as IOrganization
 
 const userSchema = new Schema<IUser>({
   name: {

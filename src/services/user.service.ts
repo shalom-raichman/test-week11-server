@@ -16,7 +16,7 @@ export const registerService = async (user: UserRegisterDTO) => {
     }
 
     const dbUser = new userModel(newUser)
-    return dbUser.save()
+    return await dbUser.save()
   } catch (err) {
     throw err
   }
